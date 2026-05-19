@@ -138,4 +138,4 @@ print(adsl %>%
         head(10))
 sink()
 
-cat("Done! Subjects:", nrow(adsl), "\n")
+cat("Done. Subjects:", nrow(adsl), "\n")
