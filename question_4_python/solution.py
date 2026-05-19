@@ -129,7 +129,7 @@ class ClinicalTrialDataAgent:
         return result
 
 
-# ----- Step 5: Run 3 test queries -----
+# ----- Step 5: Run test queries -----
 if __name__ == "__main__":
     agent = ClinicalTrialDataAgent(ae, SCHEMA_STR)
 
@@ -146,6 +146,6 @@ if __name__ == "__main__":
     # Query 3: Filter by body system
     agent.ask("Show me subjects with nervous system adverse events.")
 
-    # Query 3: Filter by body system
+    # Query 4: Filter by body system
     agent.ask("Give me subjects who had adverse events of gastrointestinal disorders.")
   
