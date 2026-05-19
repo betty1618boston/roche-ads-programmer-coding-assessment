@@ -139,3 +139,7 @@ print(adsl %>%
 sink()
 
 cat("Done. Subjects:", nrow(adsl), "\n")
+print(adsl %>%
+        select(USUBJID, AGEGR9, AGEGR9N, ITTFL,
+               TRTSDTM, LSTAVLDT) %>%
+        head(10))
