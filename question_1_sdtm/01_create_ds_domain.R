@@ -12,6 +12,12 @@ library(dplyr)
 # ------ Step 1: Input raw data ------
 ds_raw <- pharmaverseraw::ds_raw
 
+# Inspect actual column names for reference
+# names(ds_raw) returns:
+# STUDY, PATNUM, SITENM, INSTANCE, FORM, FORML,
+# IT.DSTERM, IT.DSDECOD, OTHERSP, DSDTCOL,
+# DSTMCOL, IT.DSSTDAT, DEATHDT
+
 # ------ Step 2: Define study controlled terminology ------
 study_ct <- data.frame(
   stringsAsFactors = FALSE,
@@ -40,33 +46,32 @@ study_ct <- data.frame(
 # ----- Step 3: Create the requested DS domain with following variables -----
 ds <- ds_raw %>%
   mutate(
-    STUDYID = STUDYID,
+    STUDYID = STUDY,
     DOMAIN  = "DS",
-    USUBJID = USUBJID,
-    DSTERM  = DSSPID,
+    USUBJID = paste0(STUDY, "-", PATNUM),
+    DSTERM  = IT.DSTERM,
     DSDECOD = case_when(
-      DSSPID == "Adverse Event"              ~ "ADVERSE EVENT",
-      DSSPID == "Complete"                   ~ "COMPLETED",
-      DSSPID == "Dead"                       ~ "DEATH",
-      DSSPID == "Lack of Efficacy"           ~ "LACK OF EFFICACY",
-      DSSPID == "Lost To Follow-Up"          ~ "LOST TO FOLLOW-UP",
-      DSSPID == "Physician Decision"         ~ "PHYSICIAN DECISION",
-      DSSPID == "Protocol Violation"         ~ "PROTOCOL VIOLATION",
-      DSSPID == "Trial Screen Failure"       ~ "SCREEN FAILURE",
-      DSSPID == "Study Terminated By Sponsor"~ "STUDY TERMINATED BY SPONSOR",
-      DSSPID == "Withdrawal by Subject"      ~ "WITHDRAWAL BY SUBJECT",
+      IT.DSTERM == "Adverse Event"               ~ "ADVERSE EVENT",
+      IT.DSTERM == "Complete"                    ~ "COMPLETED",
+      IT.DSTERM == "Dead"                        ~ "DEATH",
+      IT.DSTERM == "Lack of Efficacy"            ~ "LACK OF EFFICACY",
+      IT.DSTERM == "Lost To Follow-Up"           ~ "LOST TO FOLLOW-UP",
+      IT.DSTERM == "Physician Decision"          ~ "PHYSICIAN DECISION",
+      IT.DSTERM == "Protocol Violation"          ~ "PROTOCOL VIOLATION",
+      IT.DSTERM == "Trial Screen Failure"        ~ "SCREEN FAILURE",
+      IT.DSTERM == "Study Terminated By Sponsor" ~ "STUDY TERMINATED BY SPONSOR",
+      IT.DSTERM == "Withdrawal by Subject"       ~ "WITHDRAWAL BY SUBJECT",
       TRUE ~ NA_character_
     ),
     DSCAT = case_when(
-      grepl("PROTOCOL", DSDECOD, ignore.case = TRUE) ~ "PROTOCOL-RELATED EVENT",
+      grepl("PROTOCOL", IT.DSDECOD, ignore.case = TRUE) ~ "PROTOCOL-RELATED EVENT",
       TRUE ~ "DISPOSITION EVENT"
     ),
-    VISITNUM = VISITNUM,
-    VISIT    = VISIT,
-    DSDTC    = DSDTC,
-    DSSTDTC  = DSSTDTC,
-    DSSTDY   = as.numeric(as.Date(substr(DSSTDTC, 1, 10)) -
-                          as.Date(substr(RFSTDTC, 1, 10)))
+    VISITNUM = NA_real_,
+    VISIT    = NA_character_,
+    DSDTC    = DSDTCOL,
+    DSSTDTC  = IT.DSSTDAT,
+    DSSTDY   = NA_real_
   ) %>%
   group_by(USUBJID) %>%
   mutate(DSSEQ = row_number()) %>%
@@ -75,11 +80,10 @@ ds <- ds_raw %>%
          DSCAT, VISITNUM, VISIT, DSDTC, DSSTDTC, DSSTDY)
 
 # ----- Step 4: Save output -----
-saveRDS(ds, "ds_domain.rds")
 write.csv(ds, "ds_domain.csv", row.names = FALSE)
 
-# ----- Step 5: Print log -----
-sink("run_log.txt")
+# ----- Step 5: Print log as evidence -----
+sink("run_log_q1.txt")
 cat("DS domain created successfully.\n")
 cat("Number of records:", nrow(ds), "\n")
 cat("Variables:", paste(names(ds), collapse = ", "), "\n")
