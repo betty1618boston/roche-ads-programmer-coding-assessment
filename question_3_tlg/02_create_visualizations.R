@@ -1,16 +1,16 @@
-# =============================================================
-# Question 3b: AE Visualizations using {ggplot2}
+# =======================================================================================================
+# Question 3b: AE reporting - Data visualizations using {ggplot2}
 # Programmer: Xinran Qi
 # Date: May 18 2026
-# Purpose: Create two AE plots for regulatory reporting
-# =============================================================
+# Objective: TLG - create outputs for adverse events summary using the ADAE dataset and {ggplot2}
+# =======================================================================================================
 
 library(ggplot2)
 library(pharmaverseadam)
 library(dplyr)
 library(scales)
 
-# ----- Step 1: Load ADaM datasets -----
+# ------ Step 1: Input ADAE datasets ------
 adae <- pharmaverseadam::adae
 adsl <- pharmaverseadam::adsl
 
@@ -18,7 +18,7 @@ adsl <- pharmaverseadam::adsl
 n_subjects <- n_distinct(adsl$USUBJID)
 cat("Total subjects:", n_subjects, "\n")
 
-# ----- Step 2: Plot 1 — AE Severity Distribution by Treatment -----
+# ------ Step 2: Plot 1 — AE Severity Distribution by Treatment ------
 # Shows count of AEs broken down by severity within each treatment arm
 # AESEV variable contains: MILD, MODERATE, SEVERE
 
@@ -56,7 +56,7 @@ ggsave("plot1_ae_severity.png",
        width = 8, height = 6, dpi = 300)
 cat("Plot 1 saved: plot1_ae_severity.png\n")
 
-# ----- Step 3: Plot 2 — Top 10 Most Frequent AEs with 95% CI -----
+# ------- Step 3: Plot 2 — Top 10 Most Frequent Adverse Events ------
 # Uses Clopper-Pearson exact method for confidence intervals
 # This is the standard method for binomial proportions in clinical trials
 
