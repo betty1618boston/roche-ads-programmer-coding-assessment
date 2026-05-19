@@ -90,5 +90,5 @@ cat("Variables:", paste(names(ds), collapse = ", "), "\n")
 print(head(ds))
 sink()
 
-cat("Done! Records:", nrow(ds), "\n")
+cat("Done. Records:", nrow(ds), "\n")
 print(head(ds))
