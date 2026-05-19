@@ -138,11 +138,14 @@ if __name__ == "__main__":
     print("=" * 60)
 
     # Query 1: Filter by severity
-    agent.ask("Give me the subjects who had Adverse events of Moderate severity.")
+    agent.ask("Give me the subjects who had adverse events of moderate severity.")
 
     # Query 2: Filter by specific AE term
     agent.ask("Which patients experienced Headache?")
 
     # Query 3: Filter by body system
-    agent.ask("Give me subjects with gastrointestinal adverse events.")
+    agent.ask("Show me subjects with nervous system adverse events.")
+
+    # Query 3: Filter by body system
+    agent.ask("Give me subjects who had adverse events of gastrointestinal disorders.")
   
