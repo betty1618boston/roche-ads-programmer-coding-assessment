@@ -57,8 +57,7 @@ ggsave("plot1_ae_severity.png",
 cat("Plot 1 saved: plot1_ae_severity.png\n")
 
 # ------- Step 3: Plot 2 — Top 10 Most Frequent Adverse Events ------
-# Uses Clopper-Pearson exact method for confidence intervals
-# This is the standard method for binomial proportions in clinical trials
+# Use the Clopper-Pearson exact method for confidence intervals, considering the binomial proportions in clinical trials
 
 top10_ae <- adae %>%
   filter(TRTEMFL == "Y") %>%
