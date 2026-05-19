@@ -1,8 +1,8 @@
 # =============================================================
 # Question 1: SDTM DS Domain Creation using {sdtm.oak}
 # Programmer: Xinran Qi
-# Date: May 2026
-# Purpose: Create DS domain from raw pharmaverseraw::ds_raw
+# Date: May 18 2026
+# Objective: SDTM DS Domain Creation using {sdtm.oak}
 # =============================================================
 
 library(sdtm.oak)
